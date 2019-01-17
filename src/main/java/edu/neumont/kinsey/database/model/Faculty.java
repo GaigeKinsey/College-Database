@@ -21,13 +21,9 @@ public class Faculty extends Person{
 	public void speak() {
 		System.out.println("I have another lab for you!");
 	}
-
+	
 	@Override
-	public int compareTo(Person o) {
-		if (o instanceof Faculty || o instanceof Staff) {
-			return this.getLastName().compareTo(o.getLastName());
-		} else {
-			throw new IllegalArgumentException("Can't compare Faculty or Staff to a Student.");
-		}
+	public String toString() {
+		return "Faculty\n" + super.toString() + "\nDegree Program: " + getDegree().toString().replaceAll("_", " ");
 	}
 }

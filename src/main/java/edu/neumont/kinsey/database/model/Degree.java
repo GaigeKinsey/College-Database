@@ -1,5 +1,5 @@
 package edu.neumont.kinsey.database.model;
 
 public enum Degree {
-	ComputerScience, WebDevelopment, GameDevelopment, TechnologyManagement, InformationSystems
+	Computer_Science, Web_Development, Game_Development, Technology_Management, Information_Systems
 }

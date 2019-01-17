@@ -1,6 +1,6 @@
 package edu.neumont.kinsey.database.model;
 
-public class Student extends Person {
+public class Student extends Person{
 	private double GPA;
 
 	public Student() {}
@@ -22,14 +22,13 @@ public class Student extends Person {
 	public void speak() {
 		System.out.println("I need to sleep.");
 	}
-
+	
 	@Override
-	public int compareTo(Person o) {
-		if (o instanceof Student) {
-			Student other = (Student) o;
-			return Double.compare(this.getGPA(), other.getGPA());
-		} else {
-			throw new IllegalArgumentException("Can only compare Students to other Students.");
-		}
+	public String toString() {
+		return "Student\n" + super.toString() + "\nGPA: " + this.getGPA();
+	}
+
+	public boolean equals(Student o) {
+		return this.getGPA() == o.getGPA();
 	}
 }

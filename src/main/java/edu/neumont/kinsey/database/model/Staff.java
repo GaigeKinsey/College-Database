@@ -23,17 +23,7 @@ public class Staff extends Person{
 	}
 	
 	@Override
-	public int compareTo(Person o) {
-		if (o instanceof Faculty || o instanceof Staff) {
-			int result = 0;
-			if (this.getLastName().equals(o.getLastName())) {
-				result = 1;
-			} else {
-				result = -1;
-			}
-			return result;
-		} else {
-			throw new IllegalArgumentException("Can't compare Faculty or Staff to a Student.");
-		}
+	public String toString() {
+		return "Staff\n" + super.toString() + "\nSchool Department: " + getDepartment().toString().replaceAll("_", " ");
 	}
 }

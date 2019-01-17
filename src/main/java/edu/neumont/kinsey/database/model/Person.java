@@ -1,6 +1,6 @@
 package edu.neumont.kinsey.database.model;
 
-public abstract class Person implements Comparable<Person>{
+public abstract class Person implements Comparable<Person>, Speakable{
 	private final String firstName;
 	private final String lastName;
 	private final int birthDate;
@@ -30,6 +30,13 @@ public abstract class Person implements Comparable<Person>{
 	}
 	
 	public abstract void speak();
+	
+	@Override
+	public String toString() {
+		return this.getLastName() + ", " + this.getFirstName() + "\nYear Born: " + birthDate;
+	}
 
-	public abstract int compareTo(Person o);
+	public int compareTo(Person o) {
+		return this.getLastName().compareTo(o.getLastName());
+	}
 }
