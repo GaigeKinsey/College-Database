@@ -1,9 +1,10 @@
 package edu.neumont.kinsey.database.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+import edu.neumont.kinsey.database.model.CollegeDatabase;
 import edu.neumont.kinsey.database.model.Degree;
 import edu.neumont.kinsey.database.model.Department;
 import edu.neumont.kinsey.database.model.Faculty;
@@ -14,11 +15,11 @@ import edu.neumont.kinsey.database.view.UserInterface;
 
 public class Program {
 	UserInterface userInterface = new UserInterface();
-	List<Person> database = new ArrayList<>();
+	CollegeDatabase database = new CollegeDatabase();
 
 	public void run() {
 		init();
-		Collections.sort(database);
+		database.sort();
 		boolean quit = false;
 		do {
 			int selection = userInterface.databaseOptions();
@@ -42,60 +43,47 @@ public class Program {
 			case 4:
 				printDatabase();
 				break;
+			case 5:
+				speakPerson();
+				break;
 			default:
 				System.out.println("This shouldn't have happened.");
 			}
-			Collections.sort(database);
+			database.sort();
 		} while (!quit);
 	}
 
 	private void compareDatabase() {
-		int typeChoice = userInterface.promptForCompareType();
-		if (typeChoice == 1) {
-			List<Student> students = new ArrayList<>();
-			for (Person person : database) {
-				if (person instanceof Student) {
-					students.add((Student) person);
-				}
-			}
-			String[] studentChoices = new String[students.size()];
-			for (int i = 0; i < studentChoices.length; i++) {
-				studentChoices[i] = students.get(i).getFirstName() + " " + students.get(i).getLastName();
-			}
-			int selection1 = userInterface.promptForCompareStudent1(studentChoices) - 1;
-			Student student1 = students.get(selection1);
-			students.remove(selection1);
-			studentChoices = new String[students.size()];
-			for (int i = 0; i < studentChoices.length; i++) {
-				studentChoices[i] = students.get(i).getFirstName() + " " + students.get(i).getLastName();
-			}
-			Student student2 = students.get(userInterface.promptForCompareStudent2(studentChoices) - 1);
-			if (student1.equals(student2)) {
-				userInterface.notifyCompareResult(student1.getFirstName() + " " + student1.getLastName()
-						+ " has the same GPA as " + student2.getFirstName() + " " + student2.getLastName());
+		List<Person> people = new ArrayList<>();
+		for (Person person : database) {
+			people.add(person);
+		}
+		String[] peopleChoices = new String[people.size()];
+		for (int i = 0; i < peopleChoices.length; i++) {
+			peopleChoices[i] = people.get(i).getFirstName() + " " + people.get(i).getLastName();
+		}
+		int personChoice1 = userInterface.promptForCompare1(peopleChoices) - 1;
+		Person person1 = people.get(personChoice1);
+		people.remove(personChoice1);
+		peopleChoices = new String[people.size()];
+		for (int i = 0; i < peopleChoices.length; i++) {
+			peopleChoices[i] = people.get(i).getFirstName() + " " + people.get(i).getLastName();
+		}
+		int personChoice2 = userInterface.promptForCompare2(peopleChoices) - 1;
+		Person person2 = people.get(personChoice2);
+		
+		if (person1 instanceof Student && person2 instanceof Student) {
+			if (person1.compareTo(person2) > 0) {
+				userInterface.notifyCompareResult(person1.getFirstName() + " " + person1.getLastName()
+						+ " has a higher GPA than " + person2.getFirstName() + " " + person2.getLastName());
+			} else if (person1.compareTo(person2) < 0) {
+				userInterface.notifyCompareResult(person1.getFirstName() + " " + person1.getLastName()
+						+ " has a lower GPA than " + person2.getFirstName() + " " + person2.getLastName());
 			} else {
-				userInterface.notifyCompareResult(student1.getFirstName() + " " + student1.getLastName()
-						+ " has a different GPA than " + student2.getFirstName() + " " + student2.getLastName());
+				userInterface.notifyCompareResult(person1.getFirstName() + " " + person1.getLastName()
+						+ " has the same GPA as " + person2.getFirstName() + " " + person2.getLastName());
 			}
 		} else {
-			List<Person> people = new ArrayList<>();
-			for (Person person : database) {
-				if (person instanceof Faculty || person instanceof Staff) {
-					people.add(person);
-				}
-			}
-			String[] peopleChoices = new String[people.size()];
-			for (int i = 0; i < peopleChoices.length; i++) {
-				peopleChoices[i] = people.get(i).getFirstName() + " " + people.get(i).getLastName();
-			}
-			int selection1 = userInterface.promptForComparePerson1(peopleChoices) - 1;
-			Person person1 = people.get(selection1);
-			people.remove(selection1);
-			peopleChoices = new String[people.size()];
-			for (int i = 0; i < peopleChoices.length; i++) {
-				peopleChoices[i] = people.get(i).getFirstName() + " " + people.get(i).getLastName();
-			}
-			Person person2 = people.get(userInterface.promptForComparePerson2(peopleChoices) - 1);
 			if (person1.compareTo(person2) == 0) {
 				userInterface.notifyCompareResult(person1.getFirstName() + " " + person1.getLastName() + " and "
 						+ person2.getFirstName() + " " + person2.getLastName() + " have the same last name.");
@@ -134,7 +122,7 @@ public class Program {
 		int type = userInterface.promptForType();
 		String firstName = userInterface.promptForFirstName();
 		String lastName = userInterface.promptForLastName();
-		int birthDate = userInterface.promptForBirthDate();
+		LocalDate birthDate = userInterface.promptForBirthDate();
 		switch (type) {
 		case 1:
 			double GPA = userInterface.promptForGPA();
@@ -164,19 +152,30 @@ public class Program {
 			System.out.println("This shouldn't have happened.");
 		}
 	}
+	
+	private void speakPerson() {
+		List<String> names = new ArrayList<>();
+		for (Person person : database) {
+			names.add(person.getLastName() + ", " + person.getFirstName());
+		}
+		String[] personOptions = new String[names.size()];
+		personOptions = names.toArray(personOptions);
+		int speakerSelection = userInterface.promptForSpeaker(personOptions) - 1;
+		database.get(speakerSelection).speak();
+	}
 
 	private void init() {
-		database.add(new Staff("Gerald", "Cox", 1984, Department.values()[0]));
-		database.add(new Staff("Sam", "Crampus", 1964, Department.values()[1]));
-		database.add(new Staff("Gaige", "Kinsey", 1976, Department.values()[2]));
-		database.add(new Staff("Creed", "Vance", 1992, Department.values()[3]));
-		database.add(new Faculty("Gian", "Tron", 1989, Degree.values()[0]));
-		database.add(new Faculty("Derald", "Sinco", 1969, Degree.values()[1]));
-		database.add(new Faculty("Colton", "Wes", 1972, Degree.values()[2]));
-		database.add(new Faculty("John", "Wilcox", 1953, Degree.values()[3]));
-		database.add(new Faculty("Prim", "Milton", 1981, Degree.values()[4]));
-		database.add(new Student("Cory", "Goatslinger", 2001, 2.5));
-		database.add(new Student("Caitlyn", "Jenkins", 1999, 3.5));
-		database.add(new Student("Josh", "Samson", 2002, 4.0));
+		database.add(new Staff("Gerald", "Cox", LocalDate.of(1980, 10, 25), Department.values()[0]));
+		database.add(new Staff("Sam", "Crampus", LocalDate.of(1960, 8, 20), Department.values()[1]));
+		database.add(new Staff("Gaige", "Kinsey", LocalDate.of(1970, 12, 15), Department.values()[2]));
+		database.add(new Staff("Creed", "Vance", LocalDate.of(1989, 10, 29), Department.values()[3]));
+		database.add(new Faculty("Gian", "Tron", LocalDate.of(1960, 2, 8), Degree.values()[0]));
+		database.add(new Faculty("Derald", "Sinco", LocalDate.of(1999, 11, 1), Degree.values()[1]));
+		database.add(new Faculty("Colton", "Wes", LocalDate.of(1990, 4, 6), Degree.values()[2]));
+		database.add(new Faculty("John", "Wilcox", LocalDate.of(1992, 7, 7), Degree.values()[3]));
+		database.add(new Faculty("Prim", "Milton", LocalDate.of(1984, 5, 12), Degree.values()[4]));
+		database.add(new Student("Cory", "Goatslinger", LocalDate.of(1972, 10, 14), 2.5));
+		database.add(new Student("Caitlyn", "Jenkins", LocalDate.of(1964, 4, 17), 3.5));
+		database.add(new Student("Josh", "Samson", LocalDate.of(1995, 8, 14), 4.0));
 	}
 }

@@ -1,11 +1,13 @@
 package edu.neumont.kinsey.database.model;
 
-public class Student extends Person{
+import java.time.LocalDate;
+
+public class Student extends Person implements Comparable<Person>{
 	private double GPA;
 
 	public Student() {}
 	
-	public Student(String firstName, String lastName, int birthDate, double GPA) {
+	public Student(String firstName, String lastName, LocalDate birthDate, double GPA) {
 		super(firstName, lastName, birthDate);
 		this.setGPA(GPA);
 	}
@@ -28,7 +30,13 @@ public class Student extends Person{
 		return "Student\n" + super.toString() + "\nGPA: " + this.getGPA();
 	}
 
-	public boolean equals(Student o) {
-		return this.getGPA() == o.getGPA();
+	@Override
+	public int compareTo(Person o) {
+		if (o instanceof Student) {
+			Student other = (Student) o;
+			return Double.compare(this.getGPA(), other.getGPA());
+		} else {
+			return super.compareTo(o);
+		}
 	}
 }

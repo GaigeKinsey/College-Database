@@ -1,11 +1,13 @@
 package edu.neumont.kinsey.database.model;
 
+import java.time.LocalDate;
+
 public class Faculty extends Person{
 	private Degree degree;
 	
 	public Faculty() {}
 	
-	public Faculty(String firstName, String lastName, int birthDate, Degree degree) {
+	public Faculty(String firstName, String lastName, LocalDate birthDate, Degree degree) {
 		super(firstName, lastName, birthDate);
 		this.setDegree(degree);
 	}

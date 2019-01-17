@@ -1,11 +1,13 @@
 package edu.neumont.kinsey.database.model;
 
+import java.time.LocalDate;
+
 public class Staff extends Person{
 	private Department department;
 	
 	public Staff() {}
 
-	public Staff(String firstName, String lastName, int birthDate, Department department) {
+	public Staff(String firstName, String lastName, LocalDate birthDate, Department department) {
 		super(firstName, lastName, birthDate);
 		this.setDepartment(department);
 	}
