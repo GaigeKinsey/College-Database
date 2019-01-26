@@ -39,4 +39,14 @@ public class Student extends Person implements Comparable<Person>{
 			return super.compareTo(o);
 		}
 	}
+	
+	public String serialize() {
+		return super.serialize() + ", " + this.getGPA();
+	}
+	
+	public void deserialize(String piece) {
+		String[] parts = piece.split(", ");
+		super.deserialize(new String[] {parts[0], parts[1], parts[2]});
+		this.setGPA(Double.parseDouble(parts[3]));
+	}
 }

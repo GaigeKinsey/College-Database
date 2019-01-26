@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.neumont.kinsey.database.model.CollegeDatabase;
+import edu.neumont.kinsey.database.model.CollegeDatabaseFactory;
 import edu.neumont.kinsey.database.model.Degree;
 import edu.neumont.kinsey.database.model.Department;
 import edu.neumont.kinsey.database.model.Faculty;
 import edu.neumont.kinsey.database.model.Person;
+import edu.neumont.kinsey.database.model.SavableObjects;
 import edu.neumont.kinsey.database.model.Staff;
 import edu.neumont.kinsey.database.model.Student;
 import edu.neumont.kinsey.database.view.UserInterface;
@@ -16,9 +18,10 @@ import edu.neumont.kinsey.database.view.UserInterface;
 public class Program {
 	UserInterface userInterface = new UserInterface();
 	CollegeDatabase database = new CollegeDatabase();
+	SavableObjects savableObjects = new SavableObjects();
 
 	public void run() {
-		init();
+//		init();
 		database.sort();
 		boolean quit = false;
 		do {
@@ -45,6 +48,23 @@ public class Program {
 				break;
 			case 5:
 				speakPerson();
+				break;
+			case 6:
+				try {
+					
+				savableObjects.set(0, database);
+				savableObjects.save();
+				} catch (Exception ex) {
+					System.out.println("Database failed to save.");
+				}
+				break;
+			case 7:
+				try {
+				savableObjects.load(new CollegeDatabaseFactory());
+				database = (CollegeDatabase) savableObjects.get(0);
+				} catch (Exception ex) {
+					System.out.println("Database failed to load.");
+				}
 				break;
 			default:
 				System.out.println("This shouldn't have happened.");
@@ -163,7 +183,7 @@ public class Program {
 		int speakerSelection = userInterface.promptForSpeaker(personOptions) - 1;
 		database.get(speakerSelection).speak();
 	}
-
+	
 	private void init() {
 		database.add(new Staff("Gerald", "Cox", LocalDate.of(1980, 10, 25), Department.values()[0]));
 		database.add(new Staff("Sam", "Crampus", LocalDate.of(1960, 8, 20), Department.values()[1]));

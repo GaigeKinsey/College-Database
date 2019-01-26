@@ -28,4 +28,14 @@ public class Staff extends Person{
 	public String toString() {
 		return "Staff\n" + super.toString() + "\nSchool Department: " + getDepartment().toString().replaceAll("_", " ");
 	}
+	
+	public String serialize() {
+		return super.serialize() + ", " + this.getDepartment();
+	}
+	
+	public void deserialize(String piece) {
+		String[] parts = piece.split(", ");
+		super.deserialize(new String[] {parts[0], parts[1], parts[2]});
+		this.setDepartment(Department.valueOf(parts[3]));
+	}
 }

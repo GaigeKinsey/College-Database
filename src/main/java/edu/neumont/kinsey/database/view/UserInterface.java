@@ -10,7 +10,7 @@ public class UserInterface {
 	public int databaseOptions() {
 		ConsoleIO.displayMessage("What do you want to do?");
 		return ConsoleIO.promptForMenuSelection(new String[] { "Add A Person", "Remove A Person", "Compare People",
-				"Print Database", "Make Someone Speak" }, true);
+				"Print Database", "Make Someone Speak", "Save Database", "Load Database" }, true);
 	}
 
 	public void printDatabase(String database) {

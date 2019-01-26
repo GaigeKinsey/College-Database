@@ -28,4 +28,14 @@ public class Faculty extends Person{
 	public String toString() {
 		return "Faculty\n" + super.toString() + "\nDegree Program: " + getDegree().toString().replaceAll("_", " ");
 	}
+	
+	public String serialize() {
+		return super.serialize() + ", " + this.getDegree();
+	}
+	
+	public void deserialize(String piece) {
+		String[] parts = piece.split(", ");
+		super.deserialize(new String[] {parts[0], parts[1], parts[2]});
+		this.setDegree(Degree.valueOf(parts[3]));
+	}
 }
