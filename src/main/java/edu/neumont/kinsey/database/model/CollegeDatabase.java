@@ -41,6 +41,7 @@ public class CollegeDatabase extends ArrayList<Person> implements Savable{
 	
 	@Override
 	public boolean add(Person p) {
+		super.add(p);
 		if (p instanceof Student) {
 			getStudents().add((Student) p);
 		} else if (p instanceof Faculty) {
@@ -58,6 +59,18 @@ public class CollegeDatabase extends ArrayList<Person> implements Savable{
 
 	@Override
 	public String toSaveFormat() {
+		students = new StudentList();
+		faculty = new FacultyList();
+		staff = new StaffList();
+		for (Person person : this) {
+			if (person instanceof Student) {
+				students.add((Student) person);
+			} else if (person instanceof Faculty) {
+				faculty.add((Faculty) person);
+			} else {
+				staff.add((Staff) person);
+			}
+		}
 		return students.toSaveFormat() + "\r\n" + faculty.toSaveFormat() + "\r\n" + staff.toSaveFormat();
 	}
 

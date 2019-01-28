@@ -50,18 +50,14 @@ public class Program {
 				speakPerson();
 				break;
 			case 6:
-				try {
-					
-				savableObjects.set(0, database);
-				savableObjects.save();
-				} catch (Exception ex) {
-					System.out.println("Database failed to save.");
-				}
+					savableObjects.add(database);
+					savableObjects.save();
+					savableObjects.remove(0);
 				break;
 			case 7:
 				try {
-				savableObjects.load(new CollegeDatabaseFactory());
-				database = (CollegeDatabase) savableObjects.get(0);
+					savableObjects.load(new CollegeDatabaseFactory());
+					database = (CollegeDatabase) savableObjects.get(0);
 				} catch (Exception ex) {
 					System.out.println("Database failed to load.");
 				}
@@ -91,7 +87,7 @@ public class Program {
 		}
 		int personChoice2 = userInterface.promptForCompare2(peopleChoices) - 1;
 		Person person2 = people.get(personChoice2);
-		
+
 		if (person1 instanceof Student && person2 instanceof Student) {
 			if (person1.compareTo(person2) > 0) {
 				userInterface.notifyCompareResult(person1.getFirstName() + " " + person1.getLastName()
@@ -172,7 +168,7 @@ public class Program {
 			System.out.println("This shouldn't have happened.");
 		}
 	}
-	
+
 	private void speakPerson() {
 		List<String> names = new ArrayList<>();
 		for (Person person : database) {
@@ -183,7 +179,7 @@ public class Program {
 		int speakerSelection = userInterface.promptForSpeaker(personOptions) - 1;
 		database.get(speakerSelection).speak();
 	}
-	
+
 	private void init() {
 		database.add(new Staff("Gerald", "Cox", LocalDate.of(1980, 10, 25), Department.values()[0]));
 		database.add(new Staff("Sam", "Crampus", LocalDate.of(1960, 8, 20), Department.values()[1]));
