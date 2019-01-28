@@ -30,11 +30,11 @@ public class Staff extends Person{
 	}
 	
 	public String serialize() {
-		return super.serialize() + ", " + this.getDepartment();
+		return super.serialize().trim() + ", " + this.getDepartment();
 	}
 	
 	public void deserialize(String piece) {
-		String[] parts = piece.split(", ");
+		String[] parts = piece.trim().split(", ");
 		super.deserialize(new String[] {parts[0], parts[1], parts[2]});
 		this.setDepartment(Department.valueOf(parts[3]));
 	}

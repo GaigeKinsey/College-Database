@@ -15,7 +15,7 @@ public class StaffList extends ArrayList<Staff> implements Savable{
 	public String toSaveFormat() {
 		String result = "";
 		for (Staff staff : this) {
-			result += staff.serialize() + "; ";
+			result += staff.serialize().trim() + "; ";
 		}
 		return result;
 	}

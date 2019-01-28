@@ -30,11 +30,11 @@ public class Faculty extends Person{
 	}
 	
 	public String serialize() {
-		return super.serialize() + ", " + this.getDegree();
+		return super.serialize().trim() + ", " + this.getDegree();
 	}
 	
 	public void deserialize(String piece) {
-		String[] parts = piece.split(", ");
+		String[] parts = piece.trim().split(", ");
 		super.deserialize(new String[] {parts[0], parts[1], parts[2]});
 		this.setDegree(Degree.valueOf(parts[3]));
 	}

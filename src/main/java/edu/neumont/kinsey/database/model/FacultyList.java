@@ -15,7 +15,7 @@ public class FacultyList extends ArrayList<Faculty> implements Savable{
 	public String toSaveFormat() {
 		String result = "";
 		for (Faculty faculty : this) {
-			result += faculty.serialize() + "; ";
+			result += faculty.serialize().trim() + "; ";
 		}
 		return result;
 	}
